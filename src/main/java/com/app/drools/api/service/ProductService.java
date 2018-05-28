@@ -7,13 +7,16 @@ import com.app.drools.api.model.ProductResponse;
 
 public interface ProductService {
 
-	void applyDiscount(Product product);
+	/* void applyDiscount(Product product); */
+
+	void applyDiscount(List<Product> product);
 
 	List<Integer> getRuleIdList();
+	Product save(Product product);
 
 	List<Product> save(List<Product> product);
 
-	Product save(Product product);
+	List<ProductResponse> getOutputAfterRulefire();
 
 	List<Product> findAll();
 }

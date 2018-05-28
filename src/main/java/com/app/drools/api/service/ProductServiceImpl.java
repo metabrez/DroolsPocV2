@@ -27,8 +27,10 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepo productRepo;
 	private KieContainer kieContainer;
+	// private final KieSession kSession;
 
 	private List<Integer> ruleIdList;
+	private List<ProductResponse> outputAfterRulefire;
 
 	@Autowired
 	public ProductServiceImpl(KieContainer kieContainer) {
@@ -36,21 +38,27 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
-	@Override
-	public void applyDiscount(Product product) {
-		KieSession kSession = kieContainer.newKieSession("ksession-rule");
-		AgendaEventListener trackingAgendaEventListener = new TrackingAgendaEventListener();
-
-		kSession.insert(product);
-
-		kSession.addEventListener(trackingAgendaEventListener);
-		kSession.fireAllRules();
-
-		ruleIdList = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleId();
-
-		kSession.dispose();
-
-	}
+	/*
+	 * @Override public void applyDiscount(Product product) { KieSession kSession =
+	 * kieContainer.newKieSession("ksession-rule"); AgendaEventListener
+	 * trackingAgendaEventListener = new TrackingAgendaEventListener();
+	 * 
+	 * 
+	 * //kSession.execute(CommandFactory.newInsertElements(inputProducts));
+	 * kSession.insert(product);
+	 * 
+	 * 
+	 * kSession.addEventListener(trackingAgendaEventListener);
+	 * kSession.fireAllRules();
+	 * 
+	 * ruleIdList = ((TrackingAgendaEventListener)
+	 * trackingAgendaEventListener).getRuleId();
+	 * 
+	 * kSession.dispose();
+	 * 
+	 * 
+	 * }
+	 */
 
 	@Override
 	public List<Integer> getRuleIdList() {
@@ -72,6 +80,45 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> save(List<Product> product) {
 		return productRepo.save(product);
+	}
+
+	@Override
+	public void applyDiscount(List<Product> products) {
+		long beginTime = System.currentTimeMillis();
+		KieSession kSession = kieContainer.newKieSession("ksession-rule");
+		AgendaEventListener trackingAgendaEventListener = new TrackingAgendaEventListener();
+
+		for (Product daru : products) {
+			kSession.insert(daru);
+		}
+
+		kSession.addEventListener(trackingAgendaEventListener);
+		kSession.fireAllRules();
+
+		outputAfterRulefire = new ArrayList<>();
+		for (Product product : products) {
+
+			// List<Integer> ruleIdList = productService.getRuleIdList();
+
+			ProductResponse response = new ProductResponse();
+			response.setType(product.getType());
+			response.setQuality(product.getQuality());
+			response.setMade(product.getMade());
+			response.setPrice(product.getPrice());
+			response.setPurchasedDate(product.getPurchasedDate());
+			response.setDiscount(product.getDiscount());
+			// response.setRule(ruleIdList);
+			outputAfterRulefire.add(response);
+		}
+
+		ruleIdList = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleId();
+		// System.out.println("RuleID...." +ruleIdList);
+		kSession.dispose();
+
+	}
+
+	public List<ProductResponse> getOutputAfterRulefire() {
+		return outputAfterRulefire;
 	}
 
 }

@@ -58,43 +58,14 @@ public class HomeController {
 
 	private AgendaEventListener trackingAgendaEventListener;
 
+
 	@Autowired
 	public HomeController(ProductService productService) {
 		this.productService = productService;
 
 	}
 
-	@GetMapping(value = "/type/product", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<ProductResponse> getDiscount(
-			/* @ApiParam(value = "Value for Product Type", required = true) */
-			@RequestParam(required = true) String type, @RequestParam(required = true) String quality,
-			@RequestParam(required = true) String made, @RequestParam(value = "price", required = false) Integer price,
-			@RequestParam(value = "purchasedDate", required = false) @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") Date purchasedDate)
-			throws ParseException {
 
-		Product product = new Product();
-		product.setType(type);
-		product.setQuality(quality);
-		product.setMade(made);
-		product.setPrice(price);
-
-		product.setPurchasedDate(purchasedDate);
-		System.out.println("Date Printing" + product.getPurchasedDate());
-
-		productService.applyDiscount(product);
-
-		List<Integer> ruleIdList = productService.getRuleIdList();
-		ProductResponse response = new ProductResponse();
-		response.setType(product.getType());
-		response.setQuality(product.getQuality());
-		response.setMade(product.getMade());
-		response.setPrice(product.getPrice());
-		response.setPurchasedDate(product.getPurchasedDate());
-		response.setDiscount(product.getDiscount());
-		response.setRule(ruleIdList);
-
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
 
 	@RequestMapping(value = "/type/product", method = RequestMethod.POST)
 	public ResponseEntity<List<Product>> save(@RequestBody List<Product> product) {
@@ -111,11 +82,15 @@ public class HomeController {
 		long beginTime = System.currentTimeMillis();
 		List<Product> inputProducts = productService.findAll();
 		List<ProductResponse> outputAfterRulefire = new ArrayList<>();
-
-		for (Product product : inputProducts) {
+		
+		productService.applyDiscount(inputProducts);
+		outputAfterRulefire=productService.getOutputAfterRulefire();
+		
+		/*for (Product product : inputProducts) {
 			productService.applyDiscount(product);
+			//productService.getRuleIdList();
 			List<Integer> ruleIdList = productService.getRuleIdList();
-
+			
 			ProductResponse response = new ProductResponse();
 			response.setType(product.getType());
 			response.setQuality(product.getQuality());
@@ -125,7 +100,7 @@ public class HomeController {
 			response.setDiscount(product.getDiscount());
 			response.setRule(ruleIdList);
 			outputAfterRulefire.add(response);
-		}
+		}*/
 
 		long responseTime = System.currentTimeMillis() - beginTime;
 		logger.info("Response time for the call was " + responseTime);
