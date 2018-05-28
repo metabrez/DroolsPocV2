@@ -26,6 +26,8 @@ public class ProductServiceImpl implements ProductService {
 	private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 	@Autowired
 	private ProductRepo productRepo;
+	@Autowired
+	ProductService productService;
 	private KieContainer kieContainer;
 	// private final KieSession kSession;
 
@@ -38,27 +40,27 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
-	/*
-	 * @Override public void applyDiscount(Product product) { KieSession kSession =
-	 * kieContainer.newKieSession("ksession-rule"); AgendaEventListener
-	 * trackingAgendaEventListener = new TrackingAgendaEventListener();
-	 * 
-	 * 
-	 * //kSession.execute(CommandFactory.newInsertElements(inputProducts));
-	 * kSession.insert(product);
-	 * 
-	 * 
-	 * kSession.addEventListener(trackingAgendaEventListener);
-	 * kSession.fireAllRules();
-	 * 
-	 * ruleIdList = ((TrackingAgendaEventListener)
-	 * trackingAgendaEventListener).getRuleId();
-	 * 
-	 * kSession.dispose();
-	 * 
-	 * 
-	 * }
-	 */
+	
+	/*  @Override public void applyDiscount(Product product) { KieSession kSession =
+	  kieContainer.newKieSession("ksession-rule"); AgendaEventListener
+	  trackingAgendaEventListener = new TrackingAgendaEventListener();
+	  
+	  
+	  //kSession.execute(CommandFactory.newInsertElements(inputProducts));
+	  kSession.insert(product);
+	  
+	  
+	  kSession.addEventListener(trackingAgendaEventListener);
+	  kSession.fireAllRules();
+	  
+	  ruleIdList = ((TrackingAgendaEventListener)
+	  trackingAgendaEventListener).getRuleId();
+	 
+	  kSession.dispose();
+	  
+	  
+	  }*/
+	 
 
 	@Override
 	public List<Integer> getRuleIdList() {
@@ -94,11 +96,13 @@ public class ProductServiceImpl implements ProductService {
 
 		kSession.addEventListener(trackingAgendaEventListener);
 		kSession.fireAllRules();
+		 ruleIdList = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleId();
+		kSession.dispose();
 
 		outputAfterRulefire = new ArrayList<>();
 		for (Product product : products) {
 
-			// List<Integer> ruleIdList = productService.getRuleIdList();
+			List<Integer>ruleIdList = productService.getRuleIdList();
 
 			ProductResponse response = new ProductResponse();
 			response.setType(product.getType());
@@ -107,13 +111,11 @@ public class ProductServiceImpl implements ProductService {
 			response.setPrice(product.getPrice());
 			response.setPurchasedDate(product.getPurchasedDate());
 			response.setDiscount(product.getDiscount());
-			// response.setRule(ruleIdList);
+			response.setRule(ruleIdList);
 			outputAfterRulefire.add(response);
 		}
 
-		ruleIdList = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleId();
-		// System.out.println("RuleID...." +ruleIdList);
-		kSession.dispose();
+		
 
 	}
 
