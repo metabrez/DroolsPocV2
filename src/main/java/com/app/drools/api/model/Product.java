@@ -1,14 +1,15 @@
 package com.app.drools.api.model;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,6 +23,9 @@ public class Product {
 	private String made;
 	private int price;
 	
+	@Transient
+	private List<Integer> ruleList = new ArrayList<>();
+	
 	// SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
 
 	//@DateTimeFormat(pattern="dd-MM-yyyy")
@@ -31,6 +35,15 @@ public class Product {
 	 
 	private Date purchasedDate;
 	
+	public List<Integer> getRuleList() {
+		//if(ruleList)
+		return ruleList;
+	}
+
+	public void setRuleList(List<Integer> ruleList) {
+		this.ruleList = ruleList;
+	}
+
 	private int rule;
 
 	public String getQuality() {

@@ -4,6 +4,7 @@
 package com.app.drools.api.listener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,10 +48,15 @@ public class TrackingAgendaEventListener extends DefaultAgendaEventListener {
 		List<Object> objects = event.getMatch().getObjects();
 		for(Object o: objects) {
 			Product p = (Product)o;
+			List<Integer> list = p.getRuleList();
+			list.add(p.getRule());
+			p.setRuleList(list);
 			//System.out.println(p.toString());
-			ruleId.add(p.getRule());
+			//ruleId.add(p.getRule());
 			//System.out.println("Rule:" +ruleId);
 		}
+		//ruleIdMap.put(idName, ruleId);
+		//clearRuleId();
 		//System.out.println(matchList.toString());
 		StringBuilder sb = new StringBuilder("Rule fired: " + ruleName);
 		
@@ -72,6 +78,10 @@ public class TrackingAgendaEventListener extends DefaultAgendaEventListener {
 	
 	public List<Integer> getRuleId(){
 		return ruleId;
+	}
+	
+	public void clearRuleId() {
+		this.ruleId.clear();
 	}
 
 	public boolean isRuleFired(String ruleName) {
