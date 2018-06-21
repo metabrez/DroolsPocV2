@@ -89,11 +89,11 @@ public class ProductServiceImpl implements ProductService {
 		KieSession kSession = kieContainer.newKieSession("ksession-rule");
 		AgendaEventListener trackingAgendaEventListener = new TrackingAgendaEventListener();
 
-		for (Product daru : products) {
+		/*for (Product daru : products) {
 			
 			kSession.insert(daru);
 			
-		}
+		}*/
 		kSession.addEventListener(trackingAgendaEventListener);
 		//ruleIdList = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleId();
 		

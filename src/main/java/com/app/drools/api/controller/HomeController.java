@@ -81,31 +81,15 @@ public class HomeController {
 	public List<ProductResponse> getAllProduct() {
 		long beginTime = System.currentTimeMillis();
 		List<Product> inputProducts = productService.findAll();
-		List<ProductResponse> outputAfterRulefire = new ArrayList<>();
+		List<ProductResponse> productResponseList = new ArrayList<>();
 		
 		productService.applyDiscount(inputProducts);
-		outputAfterRulefire=productService.getOutputAfterRulefire();
-		
-		/*for (Product product : inputProducts) {
-			productService.applyDiscount(product);
-			//productService.getRuleIdList();
-			List<Integer> ruleIdList = productService.getRuleIdList();
-			
-			ProductResponse response = new ProductResponse();
-			response.setType(product.getType());
-			response.setQuality(product.getQuality());
-			response.setMade(product.getMade());
-			response.setPrice(product.getPrice());
-			response.setPurchasedDate(product.getPurchasedDate());
-			response.setDiscount(product.getDiscount());
-			response.setRule(ruleIdList);
-			outputAfterRulefire.add(response);
-		}*/
-
+		productResponseList=productService.getOutputAfterRulefire();
+				
 		long responseTime = System.currentTimeMillis() - beginTime;
 		logger.info("Response time for the call was " + responseTime);
 
-		return outputAfterRulefire;
+		return productResponseList;
 	}
 
 	@InitBinder
