@@ -16,11 +16,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AppDroolsApplicationTests {
+
+	@PostConstruct
+	void started() {
+		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+	}
+	List<Integer> ruleFiredList=new ArrayList<>();
+	
 
     KieServices ks = KieServices.Factory.get();
     KieContainer kContainer = ks.newKieClasspathContainer();
@@ -47,6 +59,9 @@ public class AppDroolsApplicationTests {
         kieSession.addEventListener(new TrackingAgendaEventListener());
         kieSession.fireAllRules();
         
+        kieSession.getAgendaEventListeners().size();
+        ruleFiredList.add(product.getRule());
+        System.out.println("the given input with fired rule"+product);
         assertEquals(product.getDiscount(),3);
     }
 }
