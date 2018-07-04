@@ -27,12 +27,8 @@ public class AppDroolsApplicationTests {
     KieSession kieSession;
 
 
-   /* @Before
+    @Before
     public void setup() {
-//        Resource dt
-//                = ResourceFactory
-//                .newClassPathResource("rules/rules.xls",
-//                        getClass());
     	kieSession = kContainer.newKieSession("ksession-rule");
     }
 
@@ -46,11 +42,11 @@ public class AppDroolsApplicationTests {
         product.setPrice(100);
         product.setPurchasedDate(new Date(12-4-2011));
         
-        kSession.insert(product);
+        kieSession.insert(product);
         
-        kSession.addEventListener(new TrackingAgendaEventListener());
-        kSession.fireAllRules();
+        kieSession.addEventListener(new TrackingAgendaEventListener());
+        kieSession.fireAllRules();
         
-        assertEquals(product.getDiscount(),4);
-    }*/
+        assertEquals(product.getDiscount(),3);
+    }
 }

@@ -55,9 +55,6 @@ public class TrackingAgendaEventListener extends DefaultAgendaEventListener {
 			//ruleId.add(p.getRule());
 			//System.out.println("Rule:" +ruleId);
 		}
-		//ruleIdMap.put(idName, ruleId);
-		//clearRuleId();
-		//System.out.println(matchList.toString());
 		StringBuilder sb = new StringBuilder("Rule fired: " + ruleName);
 		
 
@@ -69,10 +66,8 @@ public class TrackingAgendaEventListener extends DefaultAgendaEventListener {
 		}
 		
 	//System.out.println(sb.toString());
-		// sb = null;
 		log.debug(sb.toString());
 		
-	//	System.out.println("MatchList: " +matchList);
 
 	}
 	

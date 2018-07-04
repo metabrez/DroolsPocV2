@@ -39,27 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
-	/*
-	 * @Override public void applyDiscount(Product product) { KieSession kSession =
-	 * kieContainer.newKieSession("ksession-rule"); AgendaEventListener
-	 * trackingAgendaEventListener = new TrackingAgendaEventListener();
-	 * 
-	 * 
-	 * //kSession.execute(CommandFactory.newInsertElements(inputProducts));
-	 * kSession.insert(product);
-	 * 
-	 * 
-	 * kSession.addEventListener(trackingAgendaEventListener);
-	 * kSession.fireAllRules();
-	 * 
-	 * ruleIdList = ((TrackingAgendaEventListener)
-	 * trackingAgendaEventListener).getRuleId();
-	 * 
-	 * kSession.dispose();
-	 * 
-	 * 
-	 * }
-	 */
+	
 
 	@Override
 	public List<Integer> getRuleIdList() {
@@ -89,25 +69,19 @@ public class ProductServiceImpl implements ProductService {
 		KieSession kSession = kieContainer.newKieSession("ksession-rule");
 		AgendaEventListener trackingAgendaEventListener = new TrackingAgendaEventListener();
 
-		/*for (Product daru : products) {
+		for (Product daru : products) {
 			
 			kSession.insert(daru);
 			
-		}*/
+		}
 		kSession.addEventListener(trackingAgendaEventListener);
-		//ruleIdList = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleId();
 		
 		kSession.fireAllRules();
 
 		kSession.dispose();
 
 		outputAfterRulefire = new ArrayList<>();
-		/*Map<String, List<Integer>> ruleIdMap = new HashMap<>();
-		ruleIdMap = ((TrackingAgendaEventListener) trackingAgendaEventListener).getRuleIdMap();
-		Object[] keys = ruleIdMap.keySet().toArray();
-		for(Object o: keys) {
-			System.out.println(o.toString());
-		}*/
+		
 		
 		for (Product product : products) {
 			ProductResponse response = new ProductResponse();
@@ -117,8 +91,6 @@ public class ProductServiceImpl implements ProductService {
 			response.setPrice(product.getPrice());
 			response.setPurchasedDate(product.getPurchasedDate());
 			response.setDiscount(product.getDiscount());
-			//response.setRule(ruleIdMap.get(keys[i]));
-			//response.setRule(getRuleIdList());
 			response.setRule(product.getRuleList());
 			outputAfterRulefire.add(response);
 		}
