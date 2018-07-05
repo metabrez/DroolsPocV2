@@ -1,17 +1,25 @@
-/*package com.app.drools.api.utils;
+package com.app.drools.api.utils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
-public class DateFormatter extends org.springframework.format.datetime.DateFormatter{
+public class DateFormatter {
 
-	 @Override
-	    public Date parse(String text, Locale locale) throws ParseException {
-	        if (text != null && text.isEmpty()) {
-	            return null;
-	        }
-	        return super.parse(text, locale);
-	    }
+	public static Date formatDate(String date) throws Exception {
+		// Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		// String strDate = formatter.format(date);
+		return formatter.parse(date);
+	}
+
+	public static void main(String[] args) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			Date date = formatter.parse("31/03/2015");
+			System.out.println("Date is: " + date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 }
-*/

@@ -95,7 +95,7 @@ public class HomeController {
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
 
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}

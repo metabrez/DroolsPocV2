@@ -2,6 +2,8 @@ package com.app.drools.api;
 
 import com.app.drools.api.listener.TrackingAgendaEventListener;
 import com.app.drools.api.model.Product;
+import com.app.drools.api.utils.DateFormatter;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,10 +29,10 @@ import javax.annotation.PostConstruct;
 @SpringBootTest
 public class AppDroolsApplicationTests {
 
-	@PostConstruct
+	/*@PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
-	}
+	}*/
 	List<Integer> ruleFiredList=new ArrayList<>();
 	
 
@@ -52,7 +54,7 @@ public class AppDroolsApplicationTests {
         product.setQuality("a");
         product.setMade("uk");
         product.setPrice(100);
-        product.setPurchasedDate(new Date(12-4-2011));
+        product.setPurchasedDate(DateFormatter.formatDate("12-4-2011"));
         
         kieSession.insert(product);
         
@@ -60,8 +62,30 @@ public class AppDroolsApplicationTests {
         kieSession.fireAllRules();
         
         kieSession.getAgendaEventListeners().size();
-        ruleFiredList.add(product.getRule());
+        //ruleFiredList.add(product.getRule());
         System.out.println("the given input with fired rule"+product);
+        System.out.println("Rule List:: "+product.getRuleList());
+        assertEquals(product.getDiscount(),4);
+    }
+    @Test
+    public void test_discount_for_diamond_withoutDate()
+            throws Exception {
+        Product product = new Product();
+        product.setType("diamond");
+        product.setQuality("a");
+        product.setMade("uk");
+        product.setPrice(100);
+        product.setPurchasedDate(DateFormatter.formatDate("12-4-2012"));
+        
+        kieSession.insert(product);
+        
+        kieSession.addEventListener(new TrackingAgendaEventListener());
+        kieSession.fireAllRules();
+        
+        kieSession.getAgendaEventListeners().size();
+        //ruleFiredList.add(product.getRule());
+        System.out.println("the given input with fired rule"+product);
+        System.out.println("Rule List:: "+product.getRuleList());
         assertEquals(product.getDiscount(),3);
     }
 }

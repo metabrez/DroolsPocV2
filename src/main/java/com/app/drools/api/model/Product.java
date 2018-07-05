@@ -32,7 +32,6 @@ public class Product {
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
-	 
 	private Date purchasedDate;
 	
 	public List<Integer> getRuleList() {
@@ -119,7 +118,7 @@ public class Product {
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", type=" + type + ", quality=" + quality + ", made=" + made + ", price=" + price
-				+ ", purchasedDate=" + purchasedDate + ", rule=" + rule + ", discount=" + discount + "]";
+				+ ", purchasedDate=" + purchasedDate + ", discount=" + discount + ", ruleList = " + ruleList + "]";
 	}
 
 }
